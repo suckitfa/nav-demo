@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-'8',">
+    <meta name="viewport" content="width=device-width, initial-scale='1',.'0',">
+    <title>导航栏</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header></header>
+    <main>
+        <div class="wrapper" id="main">
+
+        </div>
+    </main>
+    <footer></footer>
+    <script>
+        var keys = {
+
+            0: {
+                0: 'q',
+                1: 'w',
+                2: 'e',
+                3: 'r',
+                4: 't',
+                5: 'y',
+                6: 'u',
+                7: 'i',
+                8: 'o',
+                9: 'p',
+                length: 10
+            },
+            1: {
+                0: 'a',
+                1: 's',
+                2: 'd',
+                3: 'f',
+                4: 'g',
+                5: 'h',
+                6: 'j',
+                7: 'k',
+                8: 'l',
+                length: 9
+            },
+            2: {
+                0: 'z',
+                1: 'x',
+                2: 'c',
+                3: 'v',
+                4: 'b',
+                5: 'n',
+                6: 'm',
+                length: 7
+            },
+            "length": 3
+        };
+        var hash = {
+            'q': 'qq.com',
+            'w': "webo.com",
+            'e': "ele.me",
+            'r': "renren.com",
+            't': "tianya.com",
+            'y': "youtube.com",
+            'u': "uc.com",
+            'i': "iqiyi.com",
+            'o': "opera.com",
+            'p': undefined,
+            'a': "acfun.tv",
+            's': "sohu.com",
+            'z': "zhihu.com",
+            'm': "mcdonalds.com.cn"
+        };
+        // 取出localStorage中的新的hash
+        var hashInLocalStorage = JSON.parse(localStorage.getItem("newhash") || "null");
+        if (hashInLocalStorage) { //如果hashInLocalStorage存在，就直接覆盖
+            hash = hashInLocalStorage;
+        }
+        //创建一个容器 
+        index = 0;
+        while (index < keys["length"]) {
+            div1 = document.createElement("div");
+            main.appendChild(div1);
+
+            index2 = 0;
+            row = keys[index];
+            // 生成键
+            while (index2 < keys[index].length) {
+                kbd = document.createElement("kbd");
+                //设置文本内容
+                kbd.textContent = row[index2];
+                button = document.createElement("button");
+                button.textContent = "编辑"
+                button.id = row[index2];
+                button.onclick = function(event) {
+                    console.log("我被点击了！");
+                    console.log(event.target);
+                    let website = prompt("给我一个网址：");
+                    hash[event.target.id] = website;
+                    localStorage.setItem("newhash", JSON.stringify(hash));
+                }
+                kbd.appendChild(button);
+                div1.appendChild(kbd);
+                index2 = index2 + 1;
+            }
+            console.log(keys[index]);
+            index = index + 1;
+        }
+
+        document.onkeypress = function(event) {
+            let kyvalue = event.key;
+            let website = hash[kyvalue];
+            console.log(website);
+            location.href = "https://www." + website;
+        }
+    </script>
+</body>
+
+</html>
