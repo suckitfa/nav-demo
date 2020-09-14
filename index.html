@@ -17,6 +17,7 @@
     </main>
     <footer></footer>
     <script>
+        // 初始化
         var keys = {
 
             0: {
@@ -57,6 +58,7 @@
             "length": 3
         };
         var hash = {
+            'b': "bilibili.com",
             'q': 'qq.com',
             'w': "webo.com",
             'e': "ele.me",
@@ -66,40 +68,46 @@
             'u': "uc.com",
             'i': "iqiyi.com",
             'o': "opera.com",
-            'p': undefined,
+            'p': "pornpic.com",
             'a': "acfun.tv",
             's': "sohu.com",
             'z': "zhihu.com",
-            'm': "mcdonalds.com.cn"
+            'm': "mcdonalds.com.cn",
+            "n": "nchu.edu.cn"
         };
         // 取出localStorage中的新的hash
-        var hashInLocalStorage = JSON.parse(localStorage.getItem("newhash") || "null");
+        var hashInLocalStorage = getFromLocalStorage("newhash");
         if (hashInLocalStorage) { //如果hashInLocalStorage存在，就直接覆盖
             hash = hashInLocalStorage;
         }
-        //创建一个容器 
-        index = 0;
-        while (index < keys["length"]) {
-            div1 = document.createElement("div");
-            div1.className = "row";
-            main.appendChild(div1);
 
-            index2 = 0;
-            row = keys[index];
-            // 生成键
-            while (index2 < keys[index].length) {
-                kbd = document.createElement("kbd");
-                let span = document.createElement("span");
-                //设置文本内容
-                span.textContent = row[index2];
-                span.className = "text";
+
+        for (let index = 0; index < keys["length"]; index++) {
+            div1 = tag('div', {
+                className: "row"
+            });
+            //加入到主区域
+            main.appendChild(div1);
+            let row = keys[index];
+
+            //处理每一行的键
+            for (let index2 = 0; index2 < row.length; index2++) {
+                let kbd = tag("kbd", {
+                    className: "key"
+                });
+                let span = tag("span", {
+                    className: "text",
+                    textContent: row[index2]
+                });
                 kbd.appendChild(span);
-                kbd.className = "key";
-                button = document.createElement("button");
-                button.textContent = "编辑";
-                button.id = row[index2];
-                //加入图标
-                let img = document.createElement("img");
+                let button = tag("button", {
+                    textContent: "编辑",
+                    id: row[index2]
+                });
+                let img = tag("img", {
+                    src: "/img/favicon.ico"
+                });
+
                 if (typeof hash[row[index2]] !== "undefined" && hash[row[index2]] != null) {
                     img.src = ("https://" + hash[row[index2]] + "/favicon.ico");
                 } else {
@@ -115,22 +123,90 @@
                     let website = prompt("给我一个网址：");
                     hash[event.target.id] = website;
                     iconImg.src = "https://" + website + "/favicon.ico";
+                    iconImg.onerror = function(event) {
+                        event.src = "img/favicon.ico";
+                    }
                     localStorage.setItem("newhash", JSON.stringify(hash));
 
                 }
                 kbd.appendChild(img);
                 kbd.appendChild(button);
                 div1.appendChild(kbd);
-                index2 = index2 + 1;
             }
-            index = index + 1;
         }
+        //生成键盘
+        // index = 0;
 
+        // while (index < keys["length"]) {
+        //     div1 = tag('div', {
+        //         className: "row"
+        //     });
+        //     main.appendChild(div1);
+
+        //     index2 = 0;
+        //     row = keys[index];
+        //     // 生成键
+        //     while (index2 < keys[index].length) {
+        //         let kbd = document.createElement("kbd");
+        //         let span = document.createElement("span");
+        //         //设置文本内容
+        //         span.textContent = row[index2];
+        //         span.className = "text";
+        //         kbd.appendChild(span);
+        //         kbd.className = "key";
+        //         button = document.createElement("button");
+        //         button.textContent = "编辑";
+        //         button.id = row[index2];
+        //         //加入图标
+        //         let img = document.createElement("img");
+        //         if (typeof hash[row[index2]] !== "undefined" && hash[row[index2]] != null) {
+        //             img.src = ("https://" + hash[row[index2]] + "/favicon.ico");
+        //         } else {
+        //             img.src = "img/favicon.ico";
+        //         }
+        //         img.onerror = function(event) {
+        //             event.target.src = 'img/favicon.ico'
+        //                 // console.log("下载失败了！");
+        //         }
+        //         button.onclick = function(event) {
+        //             let button2 = event.target; //触发时间的源
+        //             let iconImg = button2.previousSibling;
+        //             let website = prompt("给我一个网址：");
+        //             hash[event.target.id] = website;
+        //             iconImg.src = "https://" + website + "/favicon.ico";
+        //             iconImg.onerror = function(event) {
+        //                 event.src = "img/favicon.ico";
+        //             }
+        //             localStorage.setItem("newhash", JSON.stringify(hash));
+
+        //         }
+        //         kbd.appendChild(img);
+        //         kbd.appendChild(button);
+        //         div1.appendChild(kbd);
+        //         index2 = index2 + 1;
+        //     }
+        //     index = index + 1;
+        // }
+
+        // 键盘监听
         document.onkeypress = function(event) {
             let kyvalue = event.key;
             let website = hash[kyvalue];
             console.log(website);
             window.open(location.href = "https://www." + website, '_blank');
+        }
+
+        function getFromLocalStorage(name) {
+            return JSON.parse(localStorage.getItem(name) || "null");
+        }
+
+        //attributes传入的是hash结构
+        function tag(tagName, attributes) {
+            let ele = document.createElement(tagName);
+            for (let key in attributes) {
+                ele[key] = attributes[key];
+            }
+            return ele;
         }
     </script>
 </body>

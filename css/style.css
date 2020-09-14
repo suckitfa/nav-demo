@@ -16,7 +16,7 @@ main {
 }
 
 #main div kbd {
-    border: 1px solid red;
+    border: 1px solid black;
     width: 4em;
     height: 4em;
     display: inline-block;
